@@ -8,7 +8,7 @@
 #include <getopt.h>
 
 
-extern "C" __global__ void dense_2048x768x2304_rtx_2070(float* __restrict__ X, float* __restrict__ W, float* __restrict__ T_matmul_NT);
+extern "C" __global__ void nll_loss_forward(float* __restrict__ X, float* __restrict__ W, float* __restrict__ T_matmul_NT);
 
 #define BENCHMARK(i) \
 void benchmark_##i(float *const X, float *const W, float *const Y, \
@@ -153,10 +153,10 @@ BENCHMARK(0) {
 
 BENCHMARK(1) {
   size_t grid_size = B * H / 128 / 64;
-  std::cout << "dense_2048x768x2304_rtx_2070<<<" << grid_size << ", 64>>>"
+  std::cout << "nll_loss_forward<<<" << grid_size << ", 64>>>"
             << std::endl;
   auto f = [&]() {
-             dense_2048x768x2304_rtx_2070<<<grid_size, 64>>>(X, W, Y);
+             nll_loss_forward<<<grid_size, 64>>>(X, W, Y);
            };
   CUDAFunctionWrapper wrapper(f, 2. * B * I * H, is_nvprof_enabled);
   wrapper();
@@ -166,21 +166,21 @@ BENCHMARK(1) {
 BENCHMARK(2) {
   {
     auto f = [&]() {
-               dense_2048x768x2304_rtx_2070<<<576, 64>>>(X, W, Y);
+               nll_loss_forward<<<576, 64>>>(X, W, Y);
              };
     CUDAFunctionWrapper wrapper(f, 2. * 16 * 128 * I * H, is_nvprof_enabled);
     wrapper();
   }
   {
     auto f = [&]() {
-               dense_2048x768x2304_rtx_2070<<<540, 64>>>(X, W, Y);
+               nll_loss_forward<<<540, 64>>>(X, W, Y);
              };
     CUDAFunctionWrapper wrapper(f, 2. * 16 * 120 * I * H, is_nvprof_enabled);
     wrapper();
   }
   {
     auto f = [&]() {
-               dense_2048x768x2304_rtx_2070<<<576, 64>>>(X, W, Y);
+               nll_loss_forward<<<576, 64>>>(X, W, Y);
              };
     CUDAFunctionWrapper wrapper(f, 2. * 16 * 128 * I * H, is_nvprof_enabled);
     wrapper();
