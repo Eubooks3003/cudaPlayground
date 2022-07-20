@@ -1,4 +1,4 @@
-include ../../../shared/CUDA.mk
+include CUDA.mk
 
 ALL_CCFLAGS := $(ALL_CCFLAGS) --ptxas-options=-v
 
