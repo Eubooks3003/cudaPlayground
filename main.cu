@@ -84,12 +84,27 @@ int main(int argc, char *argv[]) {
   assert(T > 0 && I > 0 && H > 0 && "The parameters must be provided");
   assert(B <= MaxB && I <= MaxI && H <= MaxH &&
          "The parameters must be smaller than the allowed maximum value");
+    
+    scalar_t *X, *W, *Y;
+    index_t *Z;
+    bool R;
+    int L, K, J;
+    int64_t P;
+ 
 
-  float *X, *W, *Y;
-
-  cudaMalloc(&X, sizeof(float) * MaxB * MaxI);
-  cudaMalloc(&W, sizeof(float) * MaxH * MaxI);
-  cudaMalloc(&Y, sizeof(float) * MaxB * MaxH);
+  cudaMalloc(&X, sizeof(scalar_t) * MaxB * MaxI);
+  cudaMalloc(&W, sizeof(scalar_t) * MaxH * MaxI);
+  cudaMalloc(&Y, sizeof(scalar_t) * MaxB * MaxH);
+    
+  cudaMalloc(&Z, sizeof(index_t) * MaxB * MaxH);
+    
+  cudaMalloc(R, sizeof(bool) * MaxH * Max I);
+    
+  cudaMalloc(L, sizeof(int) * MaxB * MaxI);
+  cudaMalloc(K, sizoef(int) * MaxB * MaxH);
+  cudaMalloc(J, sizeof(int) * MaxH * MaxI);
+    
+  cudaMalloc(P, sizeof(int64_t) * MaxB * MaxI);
 
 #define CALL_BENCHMARK(num)                                                     \
 if (i == num) benchmark_##num(X, W, Y, B, I, H, is_nvprof_enabled)
@@ -166,7 +181,7 @@ BENCHMARK(1) {
   std::cout << "nll_loss_forward<<<" << grid_size << ", 64>>>"
             << std::endl;
   auto f = [&]() {
-             nll_loss_forward<<<grid_size, 64>>>(X, W, Y);
+             nll_loss_forward<<<grid_size, 64>>>(X, W, Z, Y, R, L, K, J, P);
            };
   CUDAFunctionWrapper wrapper(f, 2. * B * I * H, is_nvprof_enabled);
   wrapper();
