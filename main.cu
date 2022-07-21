@@ -8,7 +8,17 @@
 #include <getopt.h>
 
 
-extern "C" __global__ void nll_loss_forward(float* __restrict__ X, float* __restrict__ W, float* __restrict__ T_matmul_NT);
+template <typename scalar_t, typename accscalar_t, typename index_t>
+extern "C" __global__ void nll_loss_forward(scalar_t* output,
+    scalar_t* total_weight,
+    scalar_t* input,
+    index_t* target,
+    scalar_t* weights,
+    bool size_average,
+    int nframe,
+    int ndim,
+    int n_classes,
+    int64_t ignore_index);
 
 #define BENCHMARK(i) \
 void benchmark_##i(float *const X, float *const W, float *const Y, \
