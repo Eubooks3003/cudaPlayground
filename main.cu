@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
   cudaMalloc(R, sizeof(bool) * MaxH * Max I);
     
   cudaMalloc(L, sizeof(int) * MaxB * MaxI);
-  cudaMalloc(K, sizoef(int) * MaxB * MaxH);
+  cudaMalloc(K, sizeof(int) * MaxB * MaxH);
   cudaMalloc(J, sizeof(int) * MaxH * MaxI);
     
   cudaMalloc(P, sizeof(int64_t) * MaxB * MaxI);
