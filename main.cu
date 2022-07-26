@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
     
   cudaMalloc(&Z, sizeof(long) * MaxB * MaxH);
   
-  cudaMalloc(&A, sizeof(float) * MaxI * MaxH)
+  cudaMalloc(&A, sizeof(float) * MaxI * MaxH);
     
   R = True;
     
