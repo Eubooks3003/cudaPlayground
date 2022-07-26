@@ -8,12 +8,12 @@
 #include <getopt.h>
 
 
-template <typename scalar_t, typename accscalar_t, typename index_t>
-extern "C" __global__ void nll_loss_forward(scalar_t* output,
-    scalar_t* total_weight,
-    scalar_t* input,
-    index_t* target,
-    scalar_t* weights,
+//template <typename scalar_t, typename accscalar_t, typename index_t>
+extern "C" __global__ void nll_loss_forward(float* output,
+    float* total_weight,
+    float* input,
+    long* target,
+    float* weights,
     bool size_average,
     int nframe,
     int ndim,
@@ -85,18 +85,21 @@ int main(int argc, char *argv[]) {
   assert(B <= MaxB && I <= MaxI && H <= MaxH &&
          "The parameters must be smaller than the allowed maximum value");
     
-    scalar_t *X, *W, *Y;
-    index_t *Z;
+    float *X, *W, *Y;
+    long *Z;
+    float *A;
     bool R;
     int L, K, J;
     int64_t P;
  
 
-  cudaMalloc(&X, sizeof(scalar_t) * MaxB * MaxI);
-  cudaMalloc(&W, sizeof(scalar_t) * MaxH * MaxI);
-  cudaMalloc(&Y, sizeof(scalar_t) * MaxB * MaxH);
+  cudaMalloc(&X, sizeof(float) * MaxB * MaxI);
+  cudaMalloc(&W, sizeof(float) * MaxH * MaxI);
+  cudaMalloc(&Y, sizeof(float) * MaxB * MaxH);
     
-  cudaMalloc(&Z, sizeof(index_t) * MaxB * MaxH);
+  cudaMalloc(&Z, sizeof(long) * MaxB * MaxH);
+  
+  cudaMalloc(&A, sizeof(float) * MaxI * MaxH)
     
   cudaMalloc(R, sizeof(bool) * MaxH * Max I);
     
@@ -181,7 +184,7 @@ BENCHMARK(1) {
   std::cout << "nll_loss_forward<<<" << grid_size << ", 64>>>"
             << std::endl;
   auto f = [&]() {
-             nll_loss_forward<<<grid_size, 64>>>(X, W, Z, Y, R, L, K, J, P);
+             nll_loss_forward<<<grid_size, 64>>>(X, W, Z, Y, A, R, L, K, J, P);
            };
   CUDAFunctionWrapper wrapper(f, 2. * B * I * H, is_nvprof_enabled);
   wrapper();
