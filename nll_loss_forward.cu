@@ -44,8 +44,8 @@ __global__ void nll_loss_forward_reduce_cuda_kernel_2d(
   __syncthreads();
 
   if (threadIdx.x == 0) {
-    accscalar_t output_acc = 0;
-    accscalar_t total_weight_acc = 0;
+    float output_acc = 0;
+    float total_weight_acc = 0;
     for (int i = 0; i < NLL_LOSS_THREADS; ++i) {
       output_acc += sh_inputs[i];
       total_weight_acc += acc_weight[i];
