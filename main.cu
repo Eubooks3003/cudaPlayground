@@ -101,13 +101,13 @@ int main(int argc, char *argv[]) {
   
   cudaMalloc(&A, sizeof(float) * MaxI * MaxH)
     
-  cudaMalloc(R, sizeof(bool) * MaxH * Max I);
+  R = True;
     
-  cudaMalloc(L, sizeof(int) * MaxB * MaxI);
-  cudaMalloc(K, sizeof(int) * MaxB * MaxH);
-  cudaMalloc(J, sizeof(int) * MaxH * MaxI);
+  L = MaxB * MaxI;
+  K =  MaxB * MaxH;
+  J = MaxH * MaxI;
     
-  cudaMalloc(P, sizeof(int64_t) * MaxB * MaxI);
+  P = static_cast<int64_t>(MaxB * MaxI);
 
 #define CALL_BENCHMARK(num)                                                     \
 if (i == num) benchmark_##num(X, W, Y, B, I, H, is_nvprof_enabled)
@@ -184,7 +184,7 @@ BENCHMARK(1) {
   std::cout << "nll_loss_forward<<<" << grid_size << ", 64>>>"
             << std::endl;
   auto f = [&]() {
-             nll_loss_forward<<<grid_size, 64>>>(X, W, Z, Y, A, R, L, K, J, P);
+             nll_loss_forward<<<grid_size, 64>>>(X, W, Y, Z, A, R, L, K, J, P);
            };
   CUDAFunctionWrapper wrapper(f, 2. * B * I * H, is_nvprof_enabled);
   wrapper();
