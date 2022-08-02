@@ -23,7 +23,7 @@ extern "C" __global__ void nll_loss_forward(float* output,
 #define BENCHMARK(i) \
 void benchmark_##i(float *const X, float *const W, float *const Y, \
                    const int B, const int I, const int H, \
-                   const bool is_nvprof_enabled)
+                   const bool is_nvprof_enabled, long *const Z, float *const A, bool const R, int const L, int const J, int const K, int64_t const P)
 
 BENCHMARK(0);
 BENCHMARK(1);
@@ -87,12 +87,12 @@ int main(int argc, char *argv[]) {
     
     float *X, *W, *Y;
     long *Z;
-    /*
+    
     float *A;
     bool R;
     int L, K, J;
     int64_t P;
-    */
+    
  
 
   cudaMalloc(&X, sizeof(float) * MaxB * MaxI);
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
   
   cudaMalloc(&A, sizeof(float) * MaxI * MaxH);
     
-  /*
+  
   R = true;
     
   L = MaxB * MaxI;
@@ -112,10 +112,10 @@ int main(int argc, char *argv[]) {
   
     
   P = static_cast<int64_t>(MaxB * MaxI);
-  */
+  
 
 #define CALL_BENCHMARK(num)                                                     \
-if (i == num) benchmark_##num(X, W, Y, B, I, H, is_nvprof_enabled)
+if (i == num) benchmark_##num(X, W, Y, B, I, H, is_nvprof_enabled, Z, A, L, K, J, P)
 
   CALL_BENCHMARK(0);  // ./main.exe -i 0
   CALL_BENCHMARK(1);  // ./main.exe -i 1 -T 128
@@ -185,6 +185,7 @@ BENCHMARK(0) {
 
 
 BENCHMARK(1) {
+  /*
   float *A;
   bool R;
   int L, K, J;
@@ -195,6 +196,7 @@ BENCHMARK(1) {
   L = MaxB * MaxI;
   K =  MaxB * MaxH;
   J = MaxH * MaxI;
+  */
   
     
   P = static_cast<int64_t>(MaxB * MaxI);
