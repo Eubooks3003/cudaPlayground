@@ -87,10 +87,12 @@ int main(int argc, char *argv[]) {
     
     float *X, *W, *Y;
     long *Z;
+    /*
     float *A;
     bool R;
     int L, K, J;
     int64_t P;
+    */
  
 
   cudaMalloc(&X, sizeof(float) * MaxB * MaxI);
@@ -101,13 +103,16 @@ int main(int argc, char *argv[]) {
   
   cudaMalloc(&A, sizeof(float) * MaxI * MaxH);
     
+  /*
   R = true;
     
   L = MaxB * MaxI;
   K =  MaxB * MaxH;
   J = MaxH * MaxI;
+  
     
   P = static_cast<int64_t>(MaxB * MaxI);
+  */
 
 #define CALL_BENCHMARK(num)                                                     \
 if (i == num) benchmark_##num(X, W, Y, B, I, H, is_nvprof_enabled)
@@ -180,6 +185,20 @@ BENCHMARK(0) {
 
 
 BENCHMARK(1) {
+  float *A;
+  bool R;
+  int L, K, J;
+  int64_t P;
+    
+  R = true;
+    
+  L = MaxB * MaxI;
+  K =  MaxB * MaxH;
+  J = MaxH * MaxI;
+  
+    
+  P = static_cast<int64_t>(MaxB * MaxI);
+    
   size_t grid_size = B * H / 128 / 64;
   std::cout << "nll_loss_forward<<<" << grid_size << ", 64>>>"
             << std::endl;
