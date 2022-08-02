@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
   
   cudaMalloc(&A, sizeof(float) * MaxI * MaxH);
     
-  R = True;
+  R = true;
     
   L = MaxB * MaxI;
   K =  MaxB * MaxH;
