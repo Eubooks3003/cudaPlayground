@@ -185,21 +185,6 @@ BENCHMARK(0) {
 
 
 BENCHMARK(1) {
-  /*
-  float *A;
-  bool R;
-  int L, K, J;
-  int64_t P;
-    
-  R = true;
-    
-  L = MaxB * MaxI;
-  K =  MaxB * MaxH;
-  J = MaxH * MaxI;
-  */
-  
-    
-  P = static_cast<int64_t>(MaxB * MaxI);
     
   size_t grid_size = B * H / 128 / 64;
   std::cout << "nll_loss_forward<<<" << grid_size << ", 64>>>"
@@ -215,21 +200,21 @@ BENCHMARK(1) {
 BENCHMARK(2) {
   {
     auto f = [&]() {
-               nll_loss_forward<<<576, 64>>>(X, W, Y);
+               nll_loss_forward<<<576, 64>>>(X, W, Y, A, R, L, K, J, P);
              };
     CUDAFunctionWrapper wrapper(f, 2. * 16 * 128 * I * H, is_nvprof_enabled);
     wrapper();
   }
   {
     auto f = [&]() {
-               nll_loss_forward<<<540, 64>>>(X, W, Y);
+               nll_loss_forward<<<540, 64>>>(X, W, Y, A, R, L, K, J, P);
              };
     CUDAFunctionWrapper wrapper(f, 2. * 16 * 120 * I * H, is_nvprof_enabled);
     wrapper();
   }
   {
     auto f = [&]() {
-               nll_loss_forward<<<576, 64>>>(X, W, Y);
+               nll_loss_forward<<<576, 64>>>(X, W, Y, A, R, L, K, J, P);
              };
     CUDAFunctionWrapper wrapper(f, 2. * 16 * 128 * I * H, is_nvprof_enabled);
     wrapper();
