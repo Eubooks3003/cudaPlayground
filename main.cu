@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
   
 
 #define CALL_BENCHMARK(num)                                                     \
-if (i == num) benchmark_##num(X, W, Y, B, I, H, is_nvprof_enabled, Z, A, L, K, J, P)
+if (i == num) benchmark_##num(X, W, Y, B, I, H, is_nvprof_enabled, Z, A,R, L, K, J, P)
 
   CALL_BENCHMARK(0);  // ./main.exe -i 0
   CALL_BENCHMARK(1);  // ./main.exe -i 1 -T 128
