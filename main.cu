@@ -9,7 +9,7 @@
 
 
 //template <typename scalar_t, typename accscalar_t, typename index_t>
-extern "C" __global__ void nll_loss_forward(float* output,
+extern "C" __global__ void nll_loss_forward_reduce_cuda_kernel_2d(float* output,
     float* total_weight,
     float* input,
     long* target,
@@ -190,7 +190,7 @@ BENCHMARK(1) {
   std::cout << "nll_loss_forward<<<" << grid_size << ", 64>>>"
             << std::endl;
   auto f = [&]() {
-             nll_loss_forward<<<grid_size, 64>>>(X, W, Y, Z, A, R, L, K, J, P);
+             nll_loss_forward_reduce_cuda_kernel_2d<<<grid_size, 64>>>(X, W, Y, Z, A, R, L, K, J, P);
            };
   CUDAFunctionWrapper wrapper(f, 2. * B * I * H, is_nvprof_enabled);
   wrapper();
@@ -200,21 +200,21 @@ BENCHMARK(1) {
 BENCHMARK(2) {
   {
     auto f = [&]() {
-               nll_loss_forward<<<576, 64>>>(X, W, Y, Z, A, R, L, K, J, P);
+               nll_loss_forward_reduce_cuda_kernel_2d<<<576, 64>>>(X, W, Y, Z, A, R, L, K, J, P);
              };
     CUDAFunctionWrapper wrapper(f, 2. * 16 * 128 * I * H, is_nvprof_enabled);
     wrapper();
   }
   {
     auto f = [&]() {
-               nll_loss_forward<<<540, 64>>>(X, W, Y, Z, A, R, L, K, J, P);
+               nll_loss_forward_reduce_cuda_kernel_2d<<<540, 64>>>(X, W, Y, Z, A, R, L, K, J, P);
              };
     CUDAFunctionWrapper wrapper(f, 2. * 16 * 120 * I * H, is_nvprof_enabled);
     wrapper();
   }
   {
     auto f = [&]() {
-               nll_loss_forward<<<576, 64>>>(X, W, Y, Z, A, R, L, K, J, P);
+               nll_loss_forward_reduce_cuda_kernel_2d<<<576, 64>>>(X, W, Y, Z, A, R, L, K, J, P);
              };
     CUDAFunctionWrapper wrapper(f, 2. * 16 * 128 * I * H, is_nvprof_enabled);
     wrapper();
