@@ -9,7 +9,7 @@
 
 
 //template <typename scalar_t, typename accscalar_t, typename index_t>
-extern "C" __global__ void nll_loss_forward_reduce_cuda_kernel_2d(float* output,
+__global__ void nll_loss_forward_reduce_cuda_kernel_2d(float* output,
     float* total_weight,
     float* input,
     long* target,
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  assert(i != -1 && "The benchmark index MUST be provided");
+  //assert(i != -1 && "The benchmark index MUST be provided");
 
   if (i == 0 || i == 2) {
     T = 128;
